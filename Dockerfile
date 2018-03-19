@@ -1,25 +1,27 @@
-FROM golang:1.9
+FROM golang:1.9.4-alpine3.7
 
 ENV CLOUD_SDK_VERSION 193.0.0
 
-ENV INSTALL_COMPONENTS "google-cloud-sdk-datastore-emulator google-cloud-sdk-app-engine-go google-cloud-sdk-pubsub-emulator"
-RUN apt-get update -qqy && apt-get install -qqy \
+ENV PATH /google-cloud-sdk/bin:$PATH
+RUN apk --no-cache add \
         curl \
-        gcc \
-        python-dev \
-        python-setuptools \
-        apt-transport-https \
-        lsb-release \
+        python \
+        py-crcmod \
+        bash \
+        libc6-compat \
         openssh-client \
         git \
-    && easy_install -U pip && \
-    pip install -U crcmod && \
-    export CLOUD_SDK_REPO="cloud-sdk-$(lsb_release -c -s)" && \
-    echo "deb https://packages.cloud.google.com/apt $CLOUD_SDK_REPO main" > /etc/apt/sources.list.d/google-cloud-sdk.list && \
-    curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | apt-key add - && \
-    apt-get update && apt-get install -y google-cloud-sdk=${CLOUD_SDK_VERSION}-0 $INSTALL_COMPONENTS && \
+    && curl -O https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/google-cloud-sdk-${CLOUD_SDK_VERSION}-linux-x86_64.tar.gz && \
+    tar xzf google-cloud-sdk-${CLOUD_SDK_VERSION}-linux-x86_64.tar.gz && \
+    rm google-cloud-sdk-${CLOUD_SDK_VERSION}-linux-x86_64.tar.gz && \
+	mv google-cloud-sdk /google-cloud-sdk && \
+    ln -s /lib /lib64 && \
     gcloud config set core/disable_usage_reporting true && \
     gcloud config set component_manager/disable_update_check true && \
     gcloud config set metrics/environment github_docker_image && \
     gcloud --version
+
+RUN apk add --no-cache ruby ruby-rdoc ruby-irb curl ca-certificates git openjdk8-jre screen
+RUN gem install dpl --no-doc
+RUN gcloud --quiet components install app-engine-go cloud-datastore-emulator beta
 VOLUME ["/root/.config"]
