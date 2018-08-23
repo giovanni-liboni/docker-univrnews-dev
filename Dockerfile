@@ -91,7 +91,7 @@ RUN apk add --no-cache --virtual .build-deps-yarn curl gnupg tar \
   && rm yarn-v$YARN_VERSION.tar.gz.asc yarn-v$YARN_VERSION.tar.gz \
   && apk del .build-deps-yarn
 
-ENV HEROKU_CLI_VERSION '7.6.0'
+ENV HEROKU_CLI_VERSION '7.12.1'
 RUN yarn global add heroku@$HEROKU_CLI_VERSION
 
 VOLUME ["/root/.config"]
