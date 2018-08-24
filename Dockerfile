@@ -94,7 +94,10 @@ RUN apk add --no-cache --virtual .build-deps-yarn curl gnupg tar \
 ENV HEROKU_CLI_VERSION '7.12.1'
 RUN yarn global add heroku@$HEROKU_CLI_VERSION
 
+RUN echo "http://dl-cdn.alpinelinux.org/alpine/latest-stable/community" >> /etc/apk/repositories
+RUN apk update
 RUN apk add docker
+RUN apk add openrc
 RUN rc-update add docker boot
 
 VOLUME ["/root/.config"]
