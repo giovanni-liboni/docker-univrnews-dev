@@ -94,4 +94,7 @@ RUN apk add --no-cache --virtual .build-deps-yarn curl gnupg tar \
 ENV HEROKU_CLI_VERSION '7.12.1'
 RUN yarn global add heroku@$HEROKU_CLI_VERSION
 
+RUN apk add docker
+RUN rc-update add docker boot
+
 VOLUME ["/root/.config"]
