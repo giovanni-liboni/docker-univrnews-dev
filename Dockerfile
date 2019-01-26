@@ -1,8 +1,10 @@
 FROM golang:1.9.4-alpine3.7
 
-ENV CLOUD_SDK_VERSION 193.0.0
+ENV CLOUD_SDK_VERSION 214.0.0
 
 ENV PATH /google-cloud-sdk/bin:$PATH
+ENV PATH /go_appengine:$PATH
+
 RUN apk --no-cache add \
         curl \
         python \
@@ -21,9 +23,14 @@ RUN apk --no-cache add \
     gcloud config set metrics/environment github_docker_image && \
     gcloud --version
 
+RUN wget https://storage.googleapis.com/appengine-sdks/featured/go_appengine_sdk_linux_amd64-1.9.67.zip && \
+unzip go_appengine_sdk_linux_amd64-1.9.67.zip && \
+rm go_appengine_sdk_linux_amd64-1.9.67.zip && \
+mv go_appengine /go_appengine
+
 RUN apk add --no-cache ruby ruby-rdoc ruby-irb curl ca-certificates git openjdk8-jre screen
 RUN gem install dpl --no-doc
-RUN gcloud --quiet components install app-engine-go cloud-datastore-emulator beta
+RUN gcloud --quiet components install app-engine-go cloud-datastore-emulator beta pubsub-emulator
 
 ENV NODE_VERSION 8.11.3
 
