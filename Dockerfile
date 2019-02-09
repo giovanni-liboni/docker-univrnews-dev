@@ -7,7 +7,7 @@ ENV HEROKU_CLI_VERSION '7.20.1'
 RUN yarn global add heroku@$HEROKU_CLI_VERSION
 
 RUN apk add --no-cache \
-		ca-certificates openssh-keygen openssh-client postgresql-client
+		git ca-certificates openssh-keygen openssh-client postgresql-client
 
 # set up nsswitch.conf for Go's "netgo" implementation
 # - https://github.com/golang/go/blob/go1.9.1/src/net/conf.go#L194-L275
