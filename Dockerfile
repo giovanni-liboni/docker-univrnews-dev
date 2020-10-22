@@ -1,6 +1,6 @@
 FROM node:10.6.0-alpine
 MAINTAINER Stafford Brunk <stafford.brunk@gmail.com>
-LABEL version='7.6.0'
+LABEL version='7.20.1'
 LABEL description='Heroku CLI packaged on alpine linux'
 
 ENV HEROKU_CLI_VERSION '7.20.1'
@@ -14,7 +14,7 @@ RUN apk add --no-cache \
 # - docker run --rm debian:stretch grep '^hosts:' /etc/nsswitch.conf
 RUN [ ! -e /etc/nsswitch.conf ] && echo 'hosts: files dns' > /etc/nsswitch.conf
 
-ENV GOLANG_VERSION 1.11.5
+ENV GOLANG_VERSION 1.15.3
 
 RUN set -eux; \
 	apk add --no-cache --virtual .build-deps \
